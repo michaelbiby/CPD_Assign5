@@ -89,31 +89,15 @@ public class products {
     @PUT
     @Path("{id}")
     @Consumes("application/json")
-    public void doPut(@PathParam("id") String id, String str) {
-        JsonParser parser = Json.createParser(new StringReader(str));
-        Map<String, String> map = new HashMap<>();
-        String name = "", value;
-
-        while (parser.hasNext()) {
-            JsonParser.Event evt = parser.next();
-            switch (evt) {
-                case KEY_NAME:
-                    name = parser.getString();
-                    break;
-                case VALUE_STRING:
-                    value = parser.getString();
-                    map.put(name, value);
-                    break;
-            }
-        }
-        System.out.println(map);
-
-        String names = map.get("Name");
-        String description = map.get("Description");
-        String quantity = map.get("Quantity");
+    public Response doPut(@PathParam("id") String id, JsonObject object) {
+        
+        String names = object.getString("Name");
+        String description = object.getString("Description");
+        String quantity = object.getString("Quantity");
 
         doUpdate("UPDATE PRODUCT SET product_ID = ?, Name = ?, Description = ?, Quantity = ? WHERE PRODUCT_ID = ?", id, names, description, quantity, id);
 
+        return Response.ok("http://localhost:8080/CPD-4414_Assignment5-master/webresources/products" + id).build();
     }
 
     @DELETE
