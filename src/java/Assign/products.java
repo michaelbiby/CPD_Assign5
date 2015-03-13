@@ -30,6 +30,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -73,14 +74,16 @@ public class products {
      */
     @POST
     @Consumes("application/json")
-    public void doPost(JsonObject object) {
-      
-       
+    public Response doPost(JsonObject object) {
+
         String names = object.getString("Name");
         String description = object.getString("Description");
         String quantity = object.getString("Quantity");
 
         doUpdate("INSERT INTO PRODUCT ( Name, Description, Quantity) VALUES ( ?, ?, ?)", names, description, quantity);
+
+        int id = getId("SELECT product_ID from PRODUCT WHERE Name = ? AND Description = ?  ", names, description);
+        return Response.ok("http://localhost:8080/CPD-4414_Assignment5-master/webresources/products" + id).build();
     }
 
     @PUT
@@ -173,4 +176,22 @@ public class products {
         return updtd_num;
     }
 
+    private int getId(String query, String name, String desc) {
+        int id = 0;
+        try (Connection conn = credentials.getConnection()) {
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, "name");
+            pstmt.setString(2, "desc");
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                id = rs.getInt("product_ID");
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(products.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return id;
+    }
 }
