@@ -1,5 +1,6 @@
 package Assign;
 
+
 import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -92,7 +93,7 @@ public class products {
 
             return Response.status(500).build();
         } else {
-            return Response.ok("http://localhost:8080/CPD_Assign5-master/webresources/products" + id).build();
+            return Response.ok("http://localhost:8080/CPD_Assign5-master/webresources/products/" + id).build();
         }
     }
 
@@ -142,13 +143,14 @@ public class products {
         return out.toString();
     }
 
+
     private int doUpdate(String query, String... params) {
         int updtd_num = 0;
         try (Connection conn = credentials.getConnection()) {
             PreparedStatement pstmt = conn.prepareStatement(query);
             for (int i = 1; i <= params.length; i++) {
                 pstmt.setString(i, params[i - 1]);
-                System.out.println(params[i - 1]);
+//                System.out.println(params[i - 1]);
             }
             updtd_num = pstmt.executeUpdate();
         } catch (SQLException ex) {
