@@ -1,6 +1,5 @@
 package Assign;
 
-
 import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -78,7 +77,7 @@ public class products {
             return Response.ok("http://localhost:8080/CPD_Assign5-master/webresources/products" + id).build();
         }
     }
- 
+
     @PUT
     @Path("{id}")
     @Consumes({"application/json"})
@@ -142,7 +141,6 @@ public class products {
         }
         return out.toString();
     }
-
 
     private int doUpdate(String query, String... params) {
         int updtd_num = 0;
